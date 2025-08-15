@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Employee Analytics Charts</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 24px; }
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+    canvas { background: #fff; padding: 12px; border: 1px solid #eee; border-radius: 8px; }
+  </style>
+  </head>
+<body>
+  <h2>Employee Analytics</h2>
+  <div class="grid">
+    <div>
+      <h3>Headcount by Department</h3>
+      <canvas id="deptChart" height="200"></canvas>
+    </div>
+    <div>
+      <h3>Top 10 Employees by Avg Rating</h3>
+      <canvas id="ratingChart" height="200"></canvas>
+    </div>
+  </div>
+  <script>
+    const deptLabels = JSON.parse('{{ dept_labels_json|safe|escapejs }}');
+    const deptCounts = JSON.parse('{{ dept_counts_json|safe|escapejs }}');
+    const empLabels = JSON.parse('{{ emp_labels_json|safe|escapejs }}');
+    const empValues = JSON.parse('{{ emp_values_json|safe|escapejs }}');
+
+    new Chart(document.getElementById('deptChart'), {
+      type: 'bar',
+      data: { labels: deptLabels, datasets: [{ label: 'Employees', data: deptCounts, backgroundColor: '#4F46E5' }] },
+      options: { responsive: true, plugins: { legend: { display: false } } }
+    });
+
+    new Chart(document.getElementById('ratingChart'), {
+      type: 'bar',
+      data: { labels: empLabels, datasets: [{ label: 'Avg Rating', data: empValues, backgroundColor: '#10B981' }] },
+      options: { responsive: true, scales: { y: { suggestedMin: 0, suggestedMax: 5 } } }
+    });
+  </script>
+</body>
+</html>
+
+
